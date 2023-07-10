@@ -1,60 +1,34 @@
-import time
-import pytest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-
-from mydriver import MyChrome
 from locators import BurgerLocators
-from conftest import *
 
 class TestRegistration:
 
-    def test_enter_new_account_created_account(self, newuser):
-        mychrome = MyChrome("https://stellarburgers.nomoreparties.site/register")
+    def test_enter_new_account_created_account(self, new_user, my_chrome):
+        my_chrome.get("https://stellarburgers.nomoreparties.site/register")
         loc = BurgerLocators()
 
-        # Заполняем имя, email и пароль в форме регистрации
-        name = mychrome.driver.find_element(By.XPATH, loc.input_name).send_keys(newuser['name'])
-        email = mychrome.driver.find_element(By.XPATH, loc.input_email).send_keys(newuser['email'])
-        password = mychrome.driver.find_element(By.XPATH, loc.input_pass).send_keys(newuser['passw'])
+        my_chrome.find_element(By.XPATH, loc.input_name_reg_page).send_keys(new_user['name'])
+        my_chrome.find_element(By.XPATH, loc.input_email_reg_page).send_keys(new_user['email'])
+        my_chrome.find_element(By.XPATH, loc.input_pass_reg_page).send_keys(new_user['passw'])
+        my_chrome.find_element(By.XPATH,loc.button_reg).click()
 
-        time.sleep(2)
-
-        # Нажимаем на кнопку Регистрация
-        registration = mychrome.driver.find_element(By.XPATH,loc.button_reg).click()
-
-        # Ожидаем, пока произойдет переход на следующую страницу
-        WebDriverWait(mychrome.driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, loc.h2_enter)))
-
-        current_url = mychrome.driver.current_url
-
+        WebDriverWait(my_chrome, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, loc.h2_enter)))
+        current_url = my_chrome.current_url
         assert current_url == "https://stellarburgers.nomoreparties.site/login"
 
-        mychrome.driver.quit()
 
 
-    def test_enter_new_account_passw_less_6_letters(self, invaliduser):
-        mychrome = MyChrome("https://stellarburgers.nomoreparties.site/register")
+    def test_enter_new_account_passw_less_6_letters(self, invalid_user, my_chrome):
         loc = BurgerLocators()
+        my_chrome.get("https://stellarburgers.nomoreparties.site/register")
 
-        # Заполняем имя, email и неверным пароль в форме регистрации
-        name = mychrome.driver.find_element(By.XPATH, loc.input_name).send_keys(invaliduser['name'])
-        email = mychrome.driver.find_element(By.XPATH, loc.input_email).send_keys(invaliduser['email'])
-        password = mychrome.driver.find_element(By.XPATH, loc.input_pass).send_keys(invaliduser['passw'])
+        my_chrome.find_element(By.XPATH, loc.input_name_reg_page).send_keys(invalid_user['name'])
+        my_chrome.find_element(By.XPATH, loc.input_email_reg_page).send_keys(invalid_user['email'])
+        my_chrome.find_element(By.XPATH, loc.input_pass_reg_page).send_keys(invalid_user['passw'])
+        my_chrome.find_element(By.XPATH,loc.button_reg).click()
 
-        time.sleep(2)
-
-        # Нажимаем на кнопку Регистрация
-        registration = mychrome.driver.find_element(By.XPATH,loc.button_reg).click()
-
-        # Ожидаем сообщение об ошибке
-        WebDriverWait(mychrome.driver, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, loc.p_text)))
-
-        error_message = mychrome.driver.find_element(By.XPATH, loc.p_text)
-
+        WebDriverWait(my_chrome, 2).until(expected_conditions.visibility_of_element_located((By.XPATH, loc.p_error_pass)))
+        error_message = my_chrome.find_element(By.XPATH, loc.p_error_pass)
         assert error_message.text == "Некорректный пароль", "НЕВЕРНОЕ УВЕДОМЛЕНИЕ О ТОМ, ЧТО ПАРОЛЬ МЕНЕЕ 6 СИМВОЛОВ"
-
-        mychrome.driver.quit()
-
-
