@@ -2,10 +2,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from locators import BurgerLocators
+from helpers import generate_new_user, generate_invalid_user
 
 class TestRegistration:
 
-    def test_enter_new_account_created_account(self, new_user, my_chrome):
+    def test_enter_new_account_created_account(self, my_chrome):
+        new_user = generate_new_user()
         my_chrome.get("https://stellarburgers.nomoreparties.site/register")
         loc = BurgerLocators()
 
@@ -20,7 +22,8 @@ class TestRegistration:
 
 
 
-    def test_enter_new_account_passw_less_6_letters(self, invalid_user, my_chrome):
+    def test_enter_new_account_passw_less_6_letters(self, my_chrome):
+        invalid_user = generate_invalid_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site/register")
 

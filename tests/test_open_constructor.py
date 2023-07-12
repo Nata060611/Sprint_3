@@ -2,10 +2,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from locators import BurgerLocators
+from helpers import generate_existent_user
 
 class TestOpenConstructor:
 
-    def test_open_lk_click_constructor(self, existent_user, my_chrome):
+    def test_open_lk_click_constructor(self, my_chrome):
+        existent_user = generate_existent_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site/login")
         my_chrome.find_element(By.XPATH, loc.login_input_email).send_keys(existent_user['email'])

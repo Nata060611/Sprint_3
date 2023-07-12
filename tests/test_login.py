@@ -2,10 +2,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from locators import BurgerLocators
+from helpers import generate_existent_user
 
 class TestLogin:
 
-    def test_main_page_login(self, existent_user, my_chrome):
+    def test_main_page_login(self, my_chrome):
+        existent_user = generate_existent_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site")
         my_chrome.find_element(By.XPATH, loc.button_login_mainpage).click()
@@ -20,7 +22,8 @@ class TestLogin:
         assert 'Оформить заказ' in button.text
 
 
-    def test_main_page_LK(self, existent_user, my_chrome):
+    def test_main_page_LK(self, my_chrome):
+        existent_user = generate_existent_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site")
         my_chrome.find_element(By.XPATH, loc.button_lk_mainpage).click()
@@ -35,7 +38,8 @@ class TestLogin:
         assert 'Оформить заказ' in button.text
 
 
-    def test_login_from_registration_page(self, existent_user, my_chrome):
+    def test_login_from_registration_page(self, my_chrome):
+        existent_user = generate_existent_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site/register")
         my_chrome.find_element(By.XPATH, loc.button_login_reg_and_recover_page).click()
@@ -50,7 +54,8 @@ class TestLogin:
         assert 'Оформить заказ' in button.text
 
 
-    def test_login_from_recover_page(self, existent_user, my_chrome):
+    def test_login_from_recover_page(self, my_chrome):
+        existent_user = generate_existent_user()
         loc = BurgerLocators()
         my_chrome.get("https://stellarburgers.nomoreparties.site/forgot-password")
         my_chrome.find_element(By.XPATH, loc.button_login_reg_and_recover_page).click()
